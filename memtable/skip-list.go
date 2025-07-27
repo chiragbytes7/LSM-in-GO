@@ -96,6 +96,23 @@ func (s *SkipList) Set(entry Entry) {
 
 	}
 
+func (s *SkipList) Get(key Element.key) (Entry{}, bool){
+	current := s.head 
+	for level := s.maxLevel; level >= 0; level--{
+		for current.next[level] != nil && current.next[level].key < key{
+			current = current.next[level]
+		}
+	}
+	if current.next[0].key == key{
+		return Entry{
+			key: current.next[0].key
+			value: current.next[0].value
+			tombstone: current.next[0].tombstone
+		}, true 
+	return Entry{}, false 
+	}
+}
+
 func (s *SkipList) All() []Entry {
 	var All []Entry
 	curent := s.head.next[0]
