@@ -1,4 +1,3 @@
-package memtable
 import "strconv"
 import "Rand"
 
@@ -20,6 +19,7 @@ type SkipList struct {
     rand     *rand.Rand
     size     int
     head     *Element
+	full     bool  // determines if the skip list is full and sets to true if it is, if yes we start the flush thread 
 }
 
 //func to compare the key, as we are trying to find the key that is lesser than this key
@@ -91,7 +91,6 @@ func (s *SkipList) Set(entry Entry) {
 
 		s.size += len(entry.Key) + len(entry.Value) +
 		int(unsafe.Sizeof(entry.Tombstone)) +
-		int(unsafe.Sizeof(entry.Version)) +
 		len(e.next)*int(unsafe.Sizeof((*Element)(nil)))
 
 	}
@@ -127,4 +126,3 @@ func (s *SkipList) All() []Entry {
 	}
 	return All
 }
-
